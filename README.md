@@ -18,6 +18,24 @@ source code, or generates replacement code.
 - Produce a small JSON artifact that can be reviewed, versioned, or consumed by
   another internal tool.
 
+## What the toolbox includes
+
+The current release exposes one command, scan. It combines the following
+small, read-only utilities:
+
+| Utility | What it examines | What it returns |
+| --- | --- | --- |
+| Source discovery | A directory tree | Supported files while skipping common build, dependency, virtual-environment, and Git directories. |
+| Language classification | File extensions | Java, C#, JavaScript, CSS, or SQL for each supported file. |
+| Import extraction | Static source text | Unique imports, modules, stylesheet imports, or SQL table references. |
+| Declaration extraction | Static source text | Classes, interfaces, records, structs, functions, CSS selectors, or SQL objects when recognizable. |
+| Runtime-signal matching | User-provided runtime patterns | Case-insensitive matches for packages or namespaces you want to assess. |
+| JSON report builder | Collected static signals | Totals by language plus a file-level inventory. Source text is never included. |
+
+The scanner reads files only. It does not send data over the network, modify
+the input directory, run code, parse proprietary package formats, build an
+application, or suggest automated replacements.
+
 ## Install
 
 Python 3.10 or later is required.
@@ -36,6 +54,17 @@ gx-migration-toolbox scan --source C:\work\legacy-app --output reports\inventory
 
 The command prints a summary and writes the JSON report. Runtime patterns are
 optional and are matched case-insensitively.
+
+## Commands and inputs
+
+| Command | Required input | Output |
+| --- | --- | --- |
+| gx-migration-toolbox scan | Source directory and JSON output path | A portable JSON inventory. |
+
+Optional flags:
+
+- runtime-pattern can be repeated to look for package or namespace signals.
+- max-file-size-mb skips unusually large files; it defaults to 5 MB.
 
 ## Report shape
 
